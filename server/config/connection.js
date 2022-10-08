@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-require("dontenv").config();
+require("dotenv").config();
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/googlebooks', {
   useNewUrlParser: true,
