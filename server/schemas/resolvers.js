@@ -13,13 +13,13 @@ const resolvers = {
     }
   },
   Mutation: {
-    saveBook: async (parent, args, context) => {
+    saveBook: async (parent, { input }, context) => {
       if (!context.user) {
         throw new AuthenticationError('You must be logged in');
       }
       const updatedUser = await User.findOneAndUpdate(
         { _id: context.user._id },
-        { $addToSet: { savedBooks: args } },
+        { $addToSet: { savedBooks: input } },
         { new: true, runValidators: true }
       );
       return updatedUser;
@@ -48,13 +48,13 @@ const resolvers = {
     },
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        const book = await Book.findOneAndDelete({
-          _id: bookId  
-        });
+        // const book = await Book.findOneAndDelete({
+        //   _id: bookId  
+        // });
 
         return await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: book._id}},
+          { $pull: { savedBooks: {bookId} }},
           { new: true }
         )
       }
